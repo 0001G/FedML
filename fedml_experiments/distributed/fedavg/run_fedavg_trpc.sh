@@ -2,16 +2,16 @@
 set -x
 
 # enable InfiniBand
-#export NCCL_SOCKET_IFNAME=ib0
-#export GLOO_SOCKET_IFNAME=ib0
-#export TP_SOCKET_IFNAME=ib0
-#export NCCL_IB_HCA=ib0
+export NCCL_SOCKET_IFNAME=ib0
+export GLOO_SOCKET_IFNAME=ib0
+export TP_SOCKET_IFNAME=ib0
+export NCCL_IB_HCA=ib0
 
 # disable InfiniBand
-export NCCL_IB_DISABLE=1
-export NCCL_SOCKET_IFNAME=eno2
-export GLOO_SOCKET_IFNAME=eno2
-export TP_SOCKET_IFNAME=eno2
+# export NCCL_IB_DISABLE=1
+# export NCCL_SOCKET_IFNAME=eno2
+# export GLOO_SOCKET_IFNAME=eno2
+# export TP_SOCKET_IFNAME=eno2
 
 export NCCL_DEBUG=INFO
 export NCCL_MIN_NRINGS=1
@@ -26,8 +26,8 @@ CLIENT_NUM=10
 WORKER_NUM=10
 MODEL=resnet56
 DISTRIBUTION=homo
-ROUND=1
-EPOCH=20
+ROUND=10
+EPOCH=2
 BATCH_SIZE=64
 LR=0.001
 DATASET=cifar100
@@ -56,3 +56,4 @@ mpirun -np $PROCESS_NUM -hostfile ./mpi_host_file python3 ./main_fedavg.py \
   --lr $LR \
   --backend $BACKEND \
   --ci $CI
+  

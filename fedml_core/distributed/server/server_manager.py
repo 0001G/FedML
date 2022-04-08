@@ -28,11 +28,12 @@ class ServerManager(Observer):
         elif backend == "GRPC":
             HOST = "0.0.0.0"
             PORT = 50000 + rank
+            logging.info("PORT = {}".format(PORT))
             self.com_manager = GRPCCommManager(
                 HOST, PORT, ip_config_path=args.grpc_ipconfig_path, client_id=rank, client_num=size - 1
             )
         elif backend == "TRPC":
-            self.com_manager = TRPCCommManager(args.trpc_master_config_path, process_id=rank, world_size=size)
+            self.com_manager = TRPCCommManager(args.trpc_master_config_path, process_id=rank, world_size=size, enable_cuda_rpc=args.enable_cuda_rpc ,gpu_util_file=args.gpu_mapping_file, gpu_util_key=args.gpu_mapping_key)
         else:
             self.com_manager = MpiCommunicationManager(comm, rank, size, node_type="server")
         self.com_manager.add_observer(self)
@@ -63,7 +64,7 @@ class ServerManager(Observer):
         self.message_handler_dict[msg_type] = handler_callback_func
 
     def finish(self):
-        logging.info("__finish server")
+        logging.info("__finish server 1111111")
         if self.backend == "MPI":
             MPI.COMM_WORLD.Abort()
         elif self.backend == "MQTT":
@@ -72,3 +73,5 @@ class ServerManager(Observer):
             self.com_manager.stop_receive_message()
         elif self.backend == "TRPC":
             self.com_manager.stop_receive_message()
+
+
